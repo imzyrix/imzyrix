@@ -4,7 +4,5 @@ __pycache__/
 
 # reference clone of the original repo (kept locally, never published)
 _ref_original/
-# derived/locally-regenerated placeholder art — regenerate with your own photo
-source-photo.jpg
+# intermediate prepped image (derived) — regenerate with prep_photo/prep_solid_bg
 source-prepped.png
-imzyrix-ascii.svg

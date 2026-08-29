@@ -19,6 +19,11 @@
 <br>
 <br>
 
+<!-- regenerate the portrait from your own photo:
+       photo with a real/solid background -> python scripts/prep_photo.py <photo>
+       avatar with a solid background       -> python scripts/prep_solid_bg.py <photo>
+       then: python scripts/make_ascii_svg.py -->
+
 <!-- animated contribution graph: real data, boxes reveal cell by cell
      (regenerated daily by .github/workflows/update-profile-art.yml) -->
 
