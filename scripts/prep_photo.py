@@ -1,70 +1,46 @@
-#!/usr/bin/env python3
-"""Prep a photo for ASCII conversion.
-
-Removes the background (rembg), boosts local contrast (OpenCV CLAHE),
-and composites onto pure white so the background maps to the blank end
-of the ASCII ramp. Outputs data/source-prepped.png. Run once per photo.
-
-Usage:
-    python scripts/prep_photo.py source-photo.jpg
 """
+Prepare a portrait photo for clean ASCII conversion:
+  1. remove the background (rembg) so the subject is isolated
+  2. boost LOCAL contrast (CLAHE) so a flatly-lit face gains highlights and
+     shadows -- this is what turns a dark blob into a recognizable face
+  3. composite the subject onto pure white so the background reads as blank
+     (white -> spaces in the ascii ramp)
+
+Output: source-prepped.png (grayscale), consumed by make_ascii_svg.py.
+Run once whenever the source photo changes; the ascii SVG itself is static.
+
+    python scripts/prep_photo.py <input.jpg> [output.png]
+"""
+import os
 import sys
-from pathlib import Path
 
 import cv2
 import numpy as np
 from PIL import Image
 from rembg import remove
 
-DATA = Path(__file__).resolve().parent.parent / "data"
-DATA.mkdir(exist_ok=True)
+HERE = os.path.dirname(os.path.abspath(__file__))
+INP = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "..", "source-photo.jpg")
+OUT = sys.argv[2] if len(sys.argv) > 2 else os.path.join(HERE, "..", "source-prepped.png")
 
+# 1. cut out the subject
+cut = remove(Image.open(INP).convert("RGBA"))
+rgb = np.array(cut.convert("RGB"))
+alpha = np.array(cut.split()[-1])                 # 0 = background
 
-def main() -> None:
-    if len(sys.argv) < 2:
-        print(__doc__)
-        sys.exit(1)
+# 2. local-contrast the luminance (CLAHE)
+gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
+clahe = cv2.createCLAHE(clipLimit=2.6, tileGridSize=(8, 8))
+gray = clahe.apply(gray)
 
-    src = Path(sys.argv[1])
-    if not src.exists():
-        print(f"Photo not found: {src}")
-        sys.exit(1)
+# a touch of global lift so the face sits in the sparse end of the ramp
+gray = cv2.convertScaleAbs(gray, alpha=1.05, beta=18)
 
-    # 1. Remove background so the subject is isolated.
-    img = Image.open(src).convert("RGBA")
-    cut = remove(img).convert("RGBA")
+# 3. paste onto white using the alpha mask (feathered a hair to avoid a halo)
+mask = (alpha.astype(np.float32) / 255.0)
+mask = cv2.GaussianBlur(mask, (0, 0), 1.0)
+out = gray.astype(np.float32) * mask + 255.0 * (1.0 - mask)
+out = np.clip(out, 0, 255).astype(np.uint8)
 
-    # 2. Extract the subject onto white, then boost local contrast.
-    rgba = np.array(cut)
-    alpha = rgba[..., 3:4] / 255.0
-    white = np.full_like(rgba[..., :3], 255)
-    subject = (rgba[..., :3] * alpha + white * (1.0 - alpha)).astype(np.uint8)
-
-    gray = cv2.cvtColor(subject, cv2.COLOR_RGB2GRAY)
-    clahe = cv2.createCLAHE(clipLimit=2.5, tileGridSize=(8, 8))
-    gray = clahe.apply(gray)
-
-    # 3. Auto-crop to the non-white bounding box, then square-pad to a
-    #    square so portrait aspect is preserved through downsampling.
-    mask = gray < 245
-    ys, xs = np.where(mask)
-    if len(xs) == 0:
-        print("No subject found in image.")
-        sys.exit(1)
-    x1, x2, y1, y2 = xs.min(), xs.max(), ys.min(), ys.max()
-    gray = gray[y1 : y2 + 1, x1 : x2 + 1]
-
-    h, w = gray.shape
-    side = max(h, w)
-    canvas = np.full((side, side), 255, dtype=np.uint8)
-    top = (side - h) // 2
-    left = (side - w) // 2
-    canvas[top : top + h, left : left + w] = gray
-
-    out = DATA / "source-prepped.png"
-    Image.fromarray(canvas).save(out)
-    print(f"Wrote {out} ({side}x{side})")
-
-
-if __name__ == "__main__":
-    main()
+Image.fromarray(out, mode="L").save(OUT)
+print("wrote", OUT, out.shape)

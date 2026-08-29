@@ -1,3 +1,10 @@
 __pycache__/
 *.pyc
 .venv/
+
+# reference clone of the original repo (kept locally, never published)
+_ref_original/
+# derived/locally-regenerated placeholder art — regenerate with your own photo
+source-photo.jpg
+source-prepped.png
+imzyrix-ascii.svg
