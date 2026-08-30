@@ -34,6 +34,33 @@
 <br>
 <br>
 
+<!-- activity report: monthly bar chart + stat cards + weekday mix, rendered
+     from the same data as the heatmap (regenerated daily) -->
+
+<h3><code>imzyrix@github ~ $ ./activity.sh</code></h3>
+
+<img src="./activity.svg" width="980" alt="imzyrix's 12-month activity report" />
+
+<br>
+<br>
+
+<!-- live Discord presence: fetched from the public Lanyard API and rendered
+     locally, regenerated daily by the same workflow.
+     configure your Discord user ID via the DISCORD_USER_ID repo secret and
+     join the Lanyard Discord server to expose your presence -->
+
+<h3><code>imzyrix@github ~ $ ./presence.sh</code></h3>
+
+<img src="./discord-presence.svg" width="860" alt="imzyrix's live Discord presence" />
+
+<br>
+<br>
+
+<hr>
+
+<br>
+<br>
+
 <h3><code>imzyrix@github ~ $ ./links.sh</code></h3>
 
 <p><b>builder · tinkerer · sysadmin-adjacent</b></p>

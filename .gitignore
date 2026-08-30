@@ -6,3 +6,5 @@ __pycache__/
 _ref_original/
 # intermediate prepped image (derived) — regenerate with prep_photo/prep_solid_bg
 source-prepped.png
+# local Discord user ID (secrets go in the repo's DISCORD_USER_ID secret)
+scripts/config.json
