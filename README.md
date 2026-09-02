@@ -66,11 +66,15 @@
 <p><b>builder · tinkerer · sysadmin-adjacent</b></p>
 
 [![GitHub](https://img.shields.io/badge/GitHub-imzyrix-0d1117?style=for-the-badge&logo=github&logoColor=white)](https://github.com/imzyrix)
+[![Website](https://img.shields.io/badge/Website-zyrix.qzz.io-0d1117?style=for-the-badge&logo=astro&logoColor=white)](https://zyrix.qzz.io)
+[![Instagram](https://img.shields.io/badge/Instagram-@imzyrix-0d1117?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/imzyrix/)
+[![YouTube](https://img.shields.io/badge/YouTube-@zyrix--dev-0d1117?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@zyrix-dev)
+[![Reddit](https://img.shields.io/badge/Reddit-u/imzyrix-0d1117?style=for-the-badge&logo=reddit&logoColor=white)](https://www.reddit.com/user/imzyrix/)
 
-<!-- add more badges here, e.g.:
-[![Portfolio](https://img.shields.io/badge/Portfolio-...-0d1117?style=for-the-badge&logo=vercel&logoColor=white)](https://...)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-imzyrix-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/...)
--->
+<p>
+  <a href="https://github.com/ZyrixDevelopment"><code>@ZyrixDevelopment</code></a> ·
+  <a href="https://github.com/aequiarch-org"><code>@aequiarch-org</code></a>
+</p>
 
 <br>
 

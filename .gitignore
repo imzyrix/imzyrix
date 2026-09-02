@@ -8,3 +8,5 @@ _ref_original/
 source-prepped.png
 # local Discord user ID (secrets go in the repo's DISCORD_USER_ID secret)
 scripts/config.json
+# intermediate Discord avatar/decoration rasterized assets (built each run)
+data/discord/
