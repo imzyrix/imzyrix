@@ -49,23 +49,17 @@ def http_get(url, binary=False):
 
 
 def rasterize(url, target_size, out_path):
-    """Download an (animated) image, take a static frame, fit to target_size."""
+    """Download an (animated) image, take the first frame, fit to target_size."""
     data = http_get(url, binary=True)
     from PIL import Image
-    import numpy as np
     im = Image.open(io.BytesIO(data))
     im.seek(0)
-    base = np.array(im.convert("RGBA"))
-    w, h = base.shape[1], base.shape[0]
-    full = base.copy()
-    for i in range(1, getattr(im, "n_frames", 1)):
-        im.seek(i)
-        fr = np.array(im.convert("RGBA").resize((w, h)))
-        m = fr[..., 3] > 0
-        full[m] = fr[m]
-    out = Image.fromarray(full, "RGBA")
-    out.thumbnail((target_size, target_size), Image.LANCZOS)
-    out.save(out_path, "PNG", optimize=True)
+    frame = im.convert("RGBA")
+    # ponytail: single static deco frame, not the full APNG animation — for a
+    # 96px card ring the difference is invisible; swap to frame compositing if
+    # the deco ever needs to stay animated.
+    frame.thumbnail((target_size, target_size), Image.LANCZOS)
+    frame.save(out_path, "PNG", optimize=True)
 
 
 def b64(path):
