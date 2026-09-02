@@ -62,12 +62,15 @@ def decode_flags(flags):
     return badges
 
 W = 860
-H = 250
-TITLEBAR_H = 30
-PAD = 16
-AVATAR = 86
+H = 230
+TITLEBAR_H = 32
+PAD = 24
+AVATAR = 84
 AX = PAD
-AY = TITLEBAR_H + 34
+# avatar block vertically centered in the body below the titlebar
+BODY_TOP = TITLEBAR_H
+BODY_H = H - TITLEBAR_H
+AY = BODY_TOP + (BODY_H - AVATAR) / 2 - 8
 
 
 def build_svg(data):
@@ -86,7 +89,7 @@ def build_svg(data):
         "<defs>",
         f'<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">'
         f'<stop offset="0" stop-color="{BG2}"/><stop offset="1" stop-color="{BG}"/></linearGradient>',
-        f'<clipPath id="aclip"><circle cx="{AX + AVATAR / 2}" cy="{AY + AVATAR / 2}" r="{AVATAR / 2 - 2}"/></clipPath>',
+        f'<clipPath id="aclip"><circle cx="{AX + AVATAR / 2}" cy="{AY + AVATAR / 2}" r="{AVATAR / 2}"/></clipPath>',
         "</defs>",
         f'<rect width="{W}" height="{H}" rx="12" fill="url(#bg)"/>',
         f'<rect x="0.5" y="0.5" width="{W-1}" height="{H-1}" rx="12" fill="none" '
@@ -112,22 +115,18 @@ def build_svg(data):
         av_b64 = data.get("avatar_b64", "")
         dec_b64 = data.get("decoration_b64", "")
 
-        # ---- avatar + decoration ----
+        # ---- avatar + decoration (same bounding box so the frame aligns) ----
         cxm, cym = AX + AVATAR / 2, AY + AVATAR / 2
-        # decoration frame behind/around the avatar
+        R = AVATAR / 2  # 42
         if dec_b64:
+            # decoration frame overlays the avatar at the same size
             p.append(
                 f'<g class="a">'
-                f'<image href="data:image/png;base64,{dec_b64}" x="{AX - 14}" y="{AY - 14}" '
-                f'width="{AVATAR + 28}" height="{AVATAR + 28}" preserveAspectRatio="xMidYMid meet"/>'
+                f'<image href="data:image/png;base64,{dec_b64}" x="{AX}" y="{AY}" '
+                f'width="{AVATAR}" height="{AVATAR}" preserveAspectRatio="xMidYMid meet"/>'
                 f'</g>'
             )
-        # status ring
-        p.append(
-            f'<circle cx="{cxm}" cy="{cym}" r="{AVATAR / 2 + 5}" fill="none" '
-            f'stroke="{color}" stroke-width="3" opacity="0.9" class="b"/>'
-        )
-        # avatar image clipped to circle
+        # avatar clipped to a circle
         if av_b64:
             p.append(
                 f'<g clip-path="url(#aclip)" class="a">'
@@ -136,40 +135,33 @@ def build_svg(data):
                 f'</g>'
             )
         else:
-            p.append(f'<circle cx="{cxm}" cy="{cym}" r="{AVATAR / 2}" fill="{BG2}" class="a"/>')
+            p.append(f'<circle cx="{cxm}" cy="{cym}" r="{R}" fill="{BG2}" class="a"/>')
             p.append(f'<text x="{cxm}" y="{cym + 6}" font-size="30" font-weight="700" fill="{TEXT}" '
                      f'text-anchor="middle" class="a">{uname[0].upper()}</text>')
+        # status ring hugging the avatar edge
+        p.append(
+            f'<circle cx="{cxm}" cy="{cym}" r="{R + 2}" fill="none" '
+            f'stroke="{color}" stroke-width="3" opacity="0.95" class="b"/>'
+        )
 
-        # ---- name / username / status ----
+        # ---- name / username / activity (right of the avatar) ----
         tx = AX + AVATAR + 26
-        namey = AY + 26
+        namey = cym - 8          # name baseline sits on the avatar's vertical center
         p.append(f'<text x="{tx}" y="{namey}" font-size="20" font-weight="700" fill="{TEXT}" class="b">'
                  f'{uname}</text>')
-        # badge chips next to name
-        bx = tx + len(uname) * 12.5 + 12
+        # badge chips next to the display name
+        bx = tx + len(uname) * 13.5 + 12
         for i, (bname, bcolor) in enumerate(badges[:4]):
             p.append(
                 f'<g class="a">'
-                f'<rect x="{bx + i * 26}" y="{namey - 15}" width="20" height="20" rx="5" '
+                f'<rect x="{bx + i * 27}" y="{namey - 16}" width="20" height="20" rx="5" '
                 f'fill="{bcolor}">'
                 f'<title>{bname}</title></rect>'
-                f'<text x="{bx + i * 26 + 10}" y="{namey}" font-size="10" font-weight="800" '
+                f'<text x="{bx + i * 27 + 10}" y="{namey - 1}" font-size="11" font-weight="800" '
                 f'fill="#fff" text-anchor="middle">{"H" if "Brilliance" in bname else "*"}</text>'
                 f'</g>'
             )
-        # status pill
-        sw = 24 + len(stat_name) * 7.4 if stat_name else 24
-        pw = W - PAD - sw
-        p.append(
-            f'<g class="a">'
-            f'<rect x="{pw}" y="{AY - 2}" width="{sw:.0f}" height="24" rx="12" fill="{BG2}" '
-            f'stroke="{color}" stroke-opacity="0.8"/>'
-            f'<circle cx="{pw + 15}" cy="{AY + 10}" r="4.5" fill="{color}"/>'
-            f'<text x="{pw + 27}" y="{AY + 14}" font-size="12" fill="{color}" '
-            f'font-weight="700">{stat_name}</text>'
-            f'</g>'
-        )
-        # username + desktop/mobile indicator
+        # username
         p.append(
             f'<text x="{tx}" y="{namey + 22}" font-size="13" fill="{INK}" class="b">'
             f'@{username}</text>'
@@ -187,6 +179,18 @@ def build_svg(data):
                 f'<text x="{tx}" y="{namey + 46}" font-size="13" fill="{MUTED}" class="b">'
                 f'<tspan fill="{color}" font-weight="700">&#9654;</tspan> no active activity</text>'
             )
+        # status pill — right-aligned, centered vertically on the name line
+        sw = 24 + len(stat_name) * 7.4
+        pw = W - PAD - sw
+        p.append(
+            f'<g class="a">'
+            f'<rect x="{pw:.0f}" y="{namey - 19}" width="{sw:.0f}" height="24" rx="12" fill="#161b22" '
+            f'stroke="{color}" stroke-opacity="0.9"/>'
+            f'<circle cx="{pw + 15:.0f}" cy="{namey - 7}" r="4.5" fill="{color}"/>'
+            f'<text x="{pw + 27:.0f}" y="{namey - 3}" font-size="12" fill="{color}" '
+            f'font-weight="700">{stat_name}</text>'
+            f'</g>'
+        )
 
         # ---- social links row ----
         links = [
@@ -197,19 +201,22 @@ def build_svg(data):
             ("ZyrixDevelopment", "https://github.com/ZyrixDevelopment", "gh"),
             ("aequiarch-org", "https://github.com/aequiarch-org", "gh"),
         ]
-        ly = H - 26
-        p.append(f'<line x1="0" y1="{H - 44}" x2="{W}" y2="{H - 44}" stroke="{FRAME}" stroke-opacity="0.25"/>')
+        # ---- social links (measured row, no overlaps; they fit in W) ----
+        line_y = H - 46
+        ly = H - 24
+        p.append(f'<line x1="0" y1="{line_y}" x2="{W}" y2="{line_y}" stroke="{FRAME}" stroke-opacity="0.25"/>')
         p.append(f'<text x="{PAD}" y="{ly}" font-size="10" fill="{MUTED}" letter-spacing="1" class="b">'
                  f'LINKS</text>')
-        lx = PAD + 48
+        lx = PAD + 54
         for label, url, kind in links:
             marker = {"ig": "IG", "yt": "YT", "rd": "R/", "gh": "GH"}.get(kind, "WWW")
-            seg_len = len(f'[{marker}] {label}')
+            # rough mono width at 11px: brackets(9) + marker(2/char) + label(6.6/char)
+            seg_w = 9 + len(marker) * 4.5 + len(label) * 6.6 + 26
             p.append(f'<a href="{url}" target="_blank">'
-                     f'<text x="{lx}" y="{ly}" font-size="11" fill="{SOCIAL}" class="b">'
+                     f'<text x="{lx:.0f}" y="{ly}" font-size="11" fill="{SOCIAL}" class="b">'
                      f'<tspan fill="{ACCENT}" font-weight="700">[{marker}]</tspan> {label}</text>'
                      f'</a>')
-            lx += seg_len * 7.4 + 22
+            lx += seg_w
 
     p.append("</svg>")
     return "".join(p)
