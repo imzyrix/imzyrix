@@ -44,8 +44,15 @@ jobs:
       - name: Render Discord presence card SVG
         run: python scripts/make_discord_svg.py
 
+      - name: Read current contribution count
+        id: contribs
+        run: |
+          count=$(python -c "import json;print(json.load(open('data/contributions.json'))['total_contributions'])")
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+          echo "Contribution count is: $count"
+
       - name: Commit updated art
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: refresh profile art [skip ci]"
+          commit_message: "chore: refresh profile art — ${{ steps.contribs.outputs.count }} contributions [skip ci]"
           file_pattern: "data/contributions.json data/discord.json contrib-heatmap.svg activity.svg discord-presence.svg"
