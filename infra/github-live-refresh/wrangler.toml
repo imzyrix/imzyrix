@@ -1,0 +1,11 @@
+# Cloudflare Worker: GitHub profile-art live refresher.
+name = "imzyrix-live-refresh"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+# Fire every 5 minutes on time (GitHub's own cron can't).
+[triggers]
+crons = ["*/5 * * * *"]
+
+[vars]
+GH_OWNER = "imzyrix"
