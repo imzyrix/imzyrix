@@ -217,6 +217,12 @@ def build_svg(data):
                      f'<tspan fill="{ACCENT}" font-weight="700">[{marker}]</tspan> {label}</text>'
                      f'</a>')
             lx += seg_w
+        # live "generated at" timestamp — always changes each run so a commit
+        # is produced every 5 minutes even when presence/contribs don't move.
+        gen = data.get("generated_at", "")
+        if gen:
+            p.append(f'<text x="{W - PAD}" y="{ly}" font-size="10" fill="{MUTED}" '
+                     f'text-anchor="end" class="b">&#9654; {gen}</text>')
 
     p.append("</svg>")
     return "".join(p)

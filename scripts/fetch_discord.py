@@ -16,6 +16,7 @@ DISCORD_USER_ID env var (used by the GH Action) or scripts/config.json.
 Run by .github/workflows/update-profile-art.yml.
 """
 import base64
+import datetime
 import io
 import json
 import os
@@ -125,6 +126,8 @@ def main():
         "spotify": data.get("spotify"),
         "listening_to_spotify": data.get("listening_to_spotify", False),
         "activities": data.get("activities", []),
+        "generated_at": datetime.datetime.now(datetime.timezone.utc)
+        .strftime("%Y-%m-%d %H:%M:%S UTC"),
         "avatar_b64": b64(os.path.join(OUT_DIR, "avatar.png")) if os.path.exists(
             os.path.join(OUT_DIR, "avatar.png")) else "",
         "decoration_b64": b64(os.path.join(OUT_DIR, "decoration.png")) if os.path.exists(
