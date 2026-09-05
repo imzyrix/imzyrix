@@ -25,17 +25,17 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 IN_PATH = os.path.join(HERE, "..", "data", "contributions.json")
 OUT_PATH = os.path.join(HERE, "..", "activity.svg")
 
-# ---- palette (matches the rest of the profile) -----------------------------
-BG = "#0a0e14"
-BG2 = "#0d1420"
-FRAME = "#1f6feb"
-MUTED = "#7d8590"
-TEXT = "#e6edf3"
-ACCENT = "#58a6ff"
-GREEN = "#39d353"
-GOLD = "#f2cc60"
-RED = "#f85149"
-INK = "#c9d1d9"
+# ---- palette (cohesive refined dark-indigo, shared across the profile) -----
+BG = "#0d0f17"
+BG2 = "#141824"
+FRAME = "#5b5fe0"
+MUTED = "#8b93a7"
+TEXT = "#e6e9f0"
+ACCENT = "#7c86f8"
+GREEN = "#4ade80"
+GOLD = "#f6c177"
+RED = "#f7757e"
+INK = "#d6dae3"
 
 # ---- layout ---------------------------------------------------------------
 W = 980
@@ -112,7 +112,7 @@ def build_svg(data):
         f'<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">'
         f'<stop offset="0" stop-color="{BG2}"/><stop offset="1" stop-color="{BG}"/></linearGradient>',
         f'<linearGradient id="barGrad" x1="0" y1="1" x2="0" y2="0">'
-        f'<stop offset="0" stop-color="#0e4429"/><stop offset="1" stop-color="{GREEN}"/></linearGradient>',
+        f'<stop offset="0" stop-color="#12301f"/><stop offset="1" stop-color="{GREEN}"/></linearGradient>',
         "</defs>",
         f'<rect width="{W}" height="{H}" rx="14" fill="url(#bg)"/>',
         f'<rect x="0.5" y="0.5" width="{W-1}" height="{H-1}" rx="14" fill="none" '
