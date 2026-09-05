@@ -10,3 +10,5 @@ source-prepped.png
 scripts/config.json
 # intermediate Discord avatar/decoration rasterized assets (built each run)
 data/discord/
+# Cloudflare wrangler local cache (account id, etc.)
+infra/github-live-refresh/.wrangler/
