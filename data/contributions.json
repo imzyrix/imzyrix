@@ -1,13 +1,23 @@
 {
   "username": "imzyrix",
+<<<<<<< HEAD
   "generated_at": "2026-09-18T18:55:44Z",
+=======
+  "generated_at": "2026-09-05T16:39:56Z",
+>>>>>>> 59b18bbf (fix: heatmap was rendering stale fallback data)
   "range": {
     "start": "2025-09-14",
     "end": "2026-09-18"
   },
+<<<<<<< HEAD
   "total_contributions": 4552,
   "active_days": 49,
   "avg_per_active_day": 92.9,
+=======
+  "total_contributions": 541,
+  "active_days": 35,
+  "avg_per_active_day": 15.5,
+>>>>>>> 59b18bbf (fix: heatmap was rendering stale fallback data)
   "current_streak": {
     "length": 26,
     "start": "2026-08-24",
@@ -73,7 +83,11 @@
     },
     {
       "month": "2026-09",
+<<<<<<< HEAD
       "total": 4081
+=======
+      "total": 76
+>>>>>>> 59b18bbf (fix: heatmap was rendering stale fallback data)
     }
   ],
   "days": [
@@ -1503,6 +1517,7 @@
     },
     {
       "date": "2026-09-05",
+<<<<<<< HEAD
       "count": 109
     },
     {
@@ -1556,6 +1571,9 @@
     {
       "date": "2026-09-18",
       "count": 231
+=======
+      "count": 20
+>>>>>>> 59b18bbf (fix: heatmap was rendering stale fallback data)
     }
   ]
 }
