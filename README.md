@@ -63,6 +63,8 @@
 
 <h3><code>imzyrix@github ~ $ ./links.sh</code></h3>
 
+<p align="center"><img src="https://komarev.com/ghpvc/?username=imzyrix&label=profile+views&color=7c86f8&style=flat" alt="profile views" /></p>
+
 <p><b>builder · tinkerer · sysadmin-adjacent</b></p>
 
 [![GitHub](https://img.shields.io/badge/GitHub-imzyrix-0d1117?style=for-the-badge&logo=github&logoColor=white)](https://github.com/imzyrix)
