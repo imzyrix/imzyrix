@@ -3,8 +3,9 @@
 Render data/contributions.json (produced by fetch_contributions.py) as a proper
 GitHub-style contribution heatmap SVG: a grid of rounded, colored BOXES in the
 classic 53-week x 7-day calendar, revealed once with a diagonal line-after-line
-slide-down (CSS keyframes, plays on load then freezes -- no looping "glow"), a
-Less->More legend, and a real stats footer.
+pop-in cascade where active cells also flash bright (CSS keyframes, plays on
+load then freezes -- no looping "glow"), a Less->More legend, and a real stats
+footer.
 
 Run by .github/workflows/update-profile-art.yml after fetch_contributions.py.
 """
@@ -39,7 +40,8 @@ GOLD = "#f2cc60"
 # reveal timing (one-shot)
 COL_T = 0.018   # per-column delay contribution (left -> right sweep)
 ROW_T = 0.045   # per-row delay contribution (top -> bottom cascade)
-CELL_DUR = 0.42
+POP_DUR = 0.55  # pop-in duration (original streak-card animation)
+FLASH_DUR = 0.70  # pop duration + 0.15s, applied to active cells only
 
 
 def level_for(count):
@@ -102,11 +104,11 @@ def render(data):
     canvas_h = TITLEBAR_H + TOP_LABEL_H + art_h + stats_h + PAD
 
     css = f"""
-@keyframes cell {{
-  0%   {{ opacity: 0; transform: translateY(-6px); }}
-  100% {{ opacity: 1; transform: translateY(0); }}
-}}
-.c {{ opacity: 0; animation: cell {CELL_DUR:.2f}s cubic-bezier(.2,.8,.2,1) both; }}
+.c {{ transform-box:fill-box; transform-origin:center; opacity:0; animation:pop {POP_DUR}s ease-out both; }}
+.g {{ animation:pop {POP_DUR}s ease-out both, flash {FLASH_DUR}s ease-out both; }}
+@keyframes pop {{ 0%{{opacity:0;transform:scale(.2)}} 60%{{opacity:1;transform:scale(1.1)}} 100%{{opacity:1;transform:scale(1)}} }}
+@keyframes flash {{ 0%{{filter:brightness(2.4)}} 45%{{filter:brightness(2.4)}} 100%{{filter:brightness(1)}} }}
+@media (prefers-reduced-motion: reduce) {{ .c {{ opacity:1 !important; animation:none !important; }} }}
 """.strip()
 
     parts = [
@@ -138,7 +140,7 @@ def render(data):
         y = grid_top + wi * STEP + CELL * 0.78
         parts.append(f'<text x="{PAD}" y="{y:.1f}" fill="{MUTED}" font-size="9">{wname}</text>')
 
-    # the boxes -- each a rounded rect, diagonal slide-down reveal (once, freeze)
+    # the boxes -- each a rounded rect, pop-in + brightness flash reveal
     for ci, column in enumerate(grid):
         gx = grid_left + ci * STEP
         for ri, cell in enumerate(column):
@@ -147,9 +149,10 @@ def render(data):
             date_s, count, lvl = cell
             gy = grid_top + ri * STEP
             delay = ci * COL_T + ri * ROW_T
+            cls = "c g" if lvl >= 1 else "c"
             plural = "s" if count != 1 else ""
             parts.append(
-                f'<rect class="c" x="{gx}" y="{gy}" width="{CELL}" height="{CELL}" rx="2.5" '
+                f'<rect class="{cls}" x="{gx}" y="{gy}" width="{CELL}" height="{CELL}" rx="2.5" '
                 f'fill="{PALETTE[lvl]}" style="animation-delay:{delay:.3f}s">'
                 f'<title>{date_s}: {count} contribution{plural}</title></rect>'
             )
