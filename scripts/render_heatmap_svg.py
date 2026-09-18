@@ -16,8 +16,8 @@ HERE = os.path.dirname(__file__)
 IN_PATH = os.path.join(HERE, "..", "data", "contributions.json")
 OUT_PATH = os.path.join(HERE, "..", "contrib-heatmap.svg")
 
-# refined green ramp: empty -> brightest. Level 5 is a brighter neon top end.
-PALETTE = ["#151a29", "#173025", "#1f4a35", "#2e6a45", "#4ade80", "#8af5b0"]
+# GitHub-ish green ramp: empty -> brightest. Level 5 is a brighter neon top end.
+PALETTE = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353", "#69f0a0"]
 
 CELL = 12
 GAP = 3
@@ -27,14 +27,14 @@ LEFT_LABEL_W = 30
 TOP_LABEL_H = 20
 TITLEBAR_H = 30
 
-BG = "#0d0f17"
-BG2 = "#141824"
-FRAME = "#5b5fe0"
-MUTED = "#8b93a7"
-TEXT = "#e6e9f0"
-ACCENT = "#7c86f8"
-GREEN = "#4ade80"
-GOLD = "#f6c177"
+BG = "#0a0e14"
+BG2 = "#0d1420"
+FRAME = "#1f6feb"
+MUTED = "#7d8590"
+TEXT = "#e6edf3"
+ACCENT = "#22d3ee"
+GREEN = "#39d353"
+GOLD = "#f2cc60"
 
 # reveal timing (one-shot)
 COL_T = 0.018   # per-column delay contribution (left -> right sweep)

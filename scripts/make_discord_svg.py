@@ -24,13 +24,13 @@ IN_PATH = os.path.join(HERE, "..", "data", "discord.json")
 OUT_PATH = os.path.join(HERE, "..", "discord-presence.svg")
 
 # ---- palette ---------------------------------------------------------------
-BG = "#0d0f17"
-BG2 = "#141824"
+BG = "#0a0e14"
+BG2 = "#0d1420"
 FRAME = "#5865f2"            # Discord blurple
 MUTED = "#9aa3b2"
-TEXT = "#e6e9f0"
+TEXT = "#e6edf3"
 INK = "#c9d1d8"
-SOCIAL = "#8b93a7"
+SOCIAL = "#8b949e"
 
 STATUS = {
     "online": ("#23a559", "Online"),
@@ -228,7 +228,7 @@ def build_svg(data):
     return "".join(p)
 
 
-ACCENT = "#7c86f8"
+ACCENT = "#58a6ff"
 
 
 def activity_line(data):

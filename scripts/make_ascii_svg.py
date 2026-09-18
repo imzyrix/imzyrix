@@ -45,12 +45,12 @@ ART_H = ROWS * CELL_H
 CANVAS_W = ART_W + PAD * 2
 CANVAS_H = TITLEBAR_H + ART_H + STATUS_H + PAD
 
-BG = "#0e101a"
-BG2 = "#161a28"
-FRAME = "#4b4f7a"
-TITLE_TEXT = "#8b93a7"
-INK = "#d5d9e6"      # the single ascii color (matches Andrew6rant)
-CURSOR = "#d5d9e6"
+BG = "#0d1117"
+BG2 = "#111722"
+FRAME = "#30363d"
+TITLE_TEXT = "#7d8590"
+INK = "#c9d1d9"      # the single ascii color (matches Andrew6rant)
+CURSOR = "#c9d1d9"
 
 # ---- reveal timing (one-shot; a cursor rasters top -> bottom) -------------
 ROW_DUR = 0.11

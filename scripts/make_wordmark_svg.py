@@ -87,11 +87,11 @@ FOG = 0.34             # how much the far end of the word dims, 0..1
 FOG_SPAN = 0.55        # world-units of depth the fog ramp covers
 
 # ---- palette (matches the rest of the profile) ----------------------------
-BG = "#0e101a"
-BG2 = "#161a28"
-FRAME = "#4b4f7a"
-TITLE_TEXT = "#8b93a7"
-INK = "#d5d9e6"
+BG = "#0d1117"
+BG2 = "#111722"
+FRAME = "#30363d"
+TITLE_TEXT = "#7d8590"
+INK = "#c9d1d9"
 
 PAD = 18
 TITLEBAR_H = 28
